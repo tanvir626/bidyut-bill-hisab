@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>বিদ্যুৎ বিল হিসাব ২০২৬ | পোস্টপেইড ও প্রিপেইড</title>
+  <meta name="description" content="বাংলাদেশের আবাসিক বিদ্যুৎ বিলের আনুমানিক হিসাব। জুন ২০২৬-এর সংশোধিত বিইআরসি রেট, পোস্টপেইড বিল এবং প্রিপেইড রিচার্জ। অফিসিয়াল বিল নয়।">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <p class="mark">আনুমানিক হিসাব</p>
+    <h1>বিদ্যুৎ বিল হিসাব</h1>
+    <p class="lede">জুন ২০২৬-এর সংশোধিত আবাসিক রেট দিয়ে পোস্টপেইড বিল ও প্রিপেইড রিচার্জ বোঝার টুল।</p>
+    <p class="warn">এটি ডেসকো, ডিপিডিসি, বিইআরসি বা সরকারের সাইট নয়। ছাপানো বিল বা টোকেনই চূড়ান্ত।</p>
+    <p id="rate-status" class="status">রেট যাচাই হচ্ছে…</p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div class="switch" role="tablist" aria-label="হিসাবের ধরন">
+        <button type="button" id="tab-postpaid" class="is-on" role="tab" aria-selected="true">পোস্টপেইড বিল</button>
+        <button type="button" id="tab-prepaid" role="tab" aria-selected="false">প্রিপেইড রিচার্জ</button>
+      </div>
+
+      <form id="bill-form">
+        <label>
+          বিতরণ কোম্পানি
+          <select id="distributor" name="distributor">
+            <option>ডেসকো</option>
+            <option>ডিপিডিসি</option>
+            <option>নেসকো</option>
+            <option>বিপিডিবি</option>
+            <option>ওজোপাডিকো</option>
+            <option>পল্লী বিদ্যুৎ</option>
+          </select>
+          <span class="hint">আবাসিক খুচরা রেট সবার জন্য একই। নাম শুধু আপনার বিল চেনার জন্য।</span>
+        </label>
+
+        <div id="postpaid-fields">
+          <label>
+            এ মাসে ব্যবহার (ইউনিট)
+            <input id="units" name="units" type="number" inputmode="decimal" min="0" step="1" value="200">
+          </label>
+        </div>
+
+        <div id="prepaid-fields" hidden>
+          <label>
+            রিচার্জের টাকা
+            <input id="recharge" name="recharge" type="number" inputmode="decimal" min="0" step="1" value="500">
+          </label>
+          <label class="check">
+            <input id="first-of-month" type="checkbox" checked>
+            এই মাসের প্রথম রিচার্জ
+          </label>
+          <label id="used-wrap" hidden>
+            এ মাসে আগে কেনা ইউনিট
+            <input id="used-units" type="number" inputmode="decimal" min="0" step="1" value="0">
+            <span class="hint">প্রথম রিচার্জ না হলে স্ল্যাব ঠিক রাখতে এটি দিন।</span>
+          </label>
+        </div>
+
+        <label>
+          অনুমোদিত লোড (কিলোওয়াট)
+          <input id="load" name="load" type="number" inputmode="decimal" min="0" step="0.1" value="2">
+        </label>
+
+        <label>
+          মিটার ভাড়া (টাকা)
+          <input id="rent" name="rent" type="number" inputmode="decimal" min="0" step="1" value="40">
+          <span class="hint">সিঙ্গেল-ফেজ মিটারে প্রায়ই ৪০ টাকা। নিজের কেনা মিটার হলে ০ দিন।</span>
+        </label>
+
+        <label class="check">
+          <input id="lifeline" type="checkbox">
+          লাইফলাইন সংযোগ (সারা মাসে ৫০ ইউনিট বা তার কম)
+        </label>
+
+        <button type="submit" class="go">হিসাব দেখুন</button>
+      </form>
+    </section>
+
+    <section id="result" class="receipt" hidden aria-live="polite"></section>
+
+    <section class="panel prose">
+      <h2>বিল বাড়ে কেন</h2>
+      <ul>
+        <li>৭৫ ইউনিট পেরোলে পরের ইউনিটের দাম আলাদা স্ল্যাবে গণনা হয়।</li>
+        <li>ডিমান্ড চার্জ অনুমোদিত লোডের প্রতি কিলোওয়াটে ৪২ টাকা, ব্যবহার শূন্য হলেও।</li>
+        <li>এনার্জি, ডিমান্ড ও মিটার ভাড়ার ওপর ৫% ভ্যাট।</li>
+        <li>প্রিপেইডের প্রথম রিচার্জ থেকে ডিমান্ড চার্জ, মিটার ভাড়া ও ভ্যাট কেটে তারপর ইউনিট ওঠে।</li>
+      </ul>
+      <h2>জুন ২০২৬-এ কী বদলেছে</h2>
+      <p>৩ জুন ২০২৬-এর আদেশে ৭৬ ইউনিটের পরের ধাপ বেড়েছে। ৪ জুনের সংশোধনীতে লাইফলাইন ৪.৬৩ টাকা ও প্রথম ধাপ ৫.২৬ টাকা আগের মতো রাখা হয়েছে। অনেক সাইটে এখনো বাতিল হওয়া বড় রেট দেখা যায়।</p>
+      <div class="table-wrap">
+        <table>
+          <caption>আবাসিক রেট, ৪ জুন ২০২৬ পর্যন্ত সংশোধিত</caption>
+          <thead>
+            <tr><th>ধাপ</th><th>প্রতি ইউনিট</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>লাইফলাইন, সারা মাস ০–৫০</td><td>৪.৬৩ টাকা</td></tr>
+            <tr><td>০–৭৫</td><td>৫.২৬ টাকা</td></tr>
+            <tr><td>৭৬–২০০</td><td>৮.৫০ টাকা</td></tr>
+            <tr><td>২০১–৩০০</td><td>৯.১০ টাকা</td></tr>
+            <tr><td>৩০১–৪০০</td><td>৯.৬২ টাকা</td></tr>
+            <tr><td>৪০১–৬০০</td><td>১৫.০১ টাকা</td></tr>
+            <tr><td>৬০০-এর পর</td><td>১৭.৩৫ টাকা</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="source">সূত্র: <a href="https://ocsms.desco.org.bd/publicinfo/electricityact">ডেসকোতে প্রকাশিত বিইআরসি আদেশ, ৩ ও ৪ জুন ২০২৬</a>। রেট বদলালে এই পাতার তারিখও বদলাতে হবে।</p>
+    </section>
+
+    <section class="panel prose">
+      <h2>আসল বিলের সাথে মিলল?</h2>
+      <p>মিটার নম্বর, কাস্টমার আইডি বা ফোন নম্বর লিখবেন না। শুধু পার্থক্যটা বলুন।</p>
+      <label>
+        কতটা মিলেছে
+        <textarea id="feedback" rows="3" maxlength="400" placeholder="যেমন: ২০০ ইউনিটে আমার বিল ৪০ টাকা বেশি ছিল"></textarea>
+      </label>
+      <div class="row">
+        <button type="button" id="copy-feedback" class="ghost">মতামত কপি করুন</button>
+      </div>
+      <p id="copy-note" class="hint" hidden>কপি হয়েছে। মেসেঞ্জার বা ফেসবুক মন্তব্যে পেস্ট করুন।</p>
+    </section>
+  </main>
+
+  <footer>
+    <p id="maker">তৈরি করেছেন: আপনার নাম</p>
+    <p>সর্বশেষ রেট যাচাই: ৪ জুন ২০২৬-এর সংশোধনী।</p>
+  </footer>
+
+  <script src="calc.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
